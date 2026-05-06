@@ -10,5 +10,5 @@
 Фасад - library
 Билдер - PublicationBuilder
 Фабричный метод - PublicationFactory
-Шаблонный метод - Publication
+State - LoanState
 Стратегия - SearchStrategy, FineCalculator, LendingRule
