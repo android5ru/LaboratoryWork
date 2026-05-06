@@ -1,3 +1,5 @@
+package Catalog;
+
 public enum Genres {
     ARTISTIC_LITERATURE, SCIENTIFIC, EDUCATIONAL, FANTASTIC, DETECTIVE
 }

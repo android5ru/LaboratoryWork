@@ -1,3 +1,5 @@
+package Catalog;
+
 public abstract class Publication {
     protected String name;
     protected int year;
@@ -53,4 +55,7 @@ public abstract class Publication {
         return counts;
     }
 
+    public void smallPrintPublication(){
+        System.out.println(identifier + ". " + name + "(доступно: " + counts + ")");
+    }
 }

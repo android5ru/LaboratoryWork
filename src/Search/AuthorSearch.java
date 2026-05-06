@@ -1,4 +1,8 @@
-public class AuthorSearch implements SearchStrategy{
+package Search;
+
+import Catalog.Publication;
+
+public class AuthorSearch implements SearchStrategy {
     private String author;
 
     public AuthorSearch(String author){

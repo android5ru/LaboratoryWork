@@ -1,4 +1,9 @@
-public class GenreSearch implements SearchStrategy{
+package Search;
+
+import Catalog.Genres;
+import Catalog.Publication;
+
+public class GenreSearch implements SearchStrategy {
     private Genres genre;
 
     public GenreSearch(Genres genre){

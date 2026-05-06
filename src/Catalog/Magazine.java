@@ -1,4 +1,6 @@
-public class Magazine extends Publication{
+package Catalog;
+
+public class Magazine extends Publication {
     public Magazine(String name, int year, Genres genre, String editorial, String issueNumber, int counts) {
         super(name, year, genre, editorial, issueNumber, counts);
     }

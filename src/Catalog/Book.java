@@ -1,3 +1,5 @@
+package Catalog;
+
 public class Book extends Publication {
     public Book(String name, int year, Genres genre, String author, String ISBN, int counts) {
         super(name, year, genre, author, ISBN, counts);

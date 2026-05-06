@@ -1,4 +1,6 @@
-public class DayFineCalculator implements FineCalculator{
+package FineCalculator;
+
+public class DayFineCalculator implements FineCalculator {
     private double ratePerDay;
     public DayFineCalculator(double ratePerDay){this.ratePerDay = ratePerDay;}
 

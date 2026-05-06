@@ -1,15 +1,26 @@
+import Catalog.Publication;
+import Catalog.PublicationType;
+import Client.Client;
+import Client.Loan;
+import FineCalculator.FineCalculator;
+import FineCalculator.DayFineCalculator;
+import LendingRule.LendingRule;
+import LendingRule.BookLendingRule;
+import LendingRule.MagazineLendingRule;
+import Search.SearchStrategy;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Library {
+public class    Library {
     private List<Client> clients = new ArrayList<>();
     private List<Publication> publications = new ArrayList<>();;
     private List<Loan> loans = new ArrayList<>();
-
     private Map<PublicationType, LendingRule> lendingRules = new HashMap<>();
-    private FineCalculator fineCalculator = new DayFineCalculator(1.5);
+    private final double FINE_ONE_DAY = 1.5;
+    private FineCalculator fineCalculator = new DayFineCalculator(FINE_ONE_DAY);
 
     public Library(){
         lendingRules.put(PublicationType.BOOK, new BookLendingRule());
@@ -53,17 +64,15 @@ public class Library {
         PublicationType typeName = publication.getTypeName();
         LendingRule rule = lendingRules.getOrDefault(typeName, new BookLendingRule());
 
-        if (client.getLoansCountByType(typeName) >= rule.MaxCopiesPerClient()){
-            System.out.println("Превышен лимит займов для этого типа изданий");
-            return null;
+        if (client.getLoansCountByType(typeName) >= rule.maxCopiesPerClient()){
+            throw new IllegalStateException("Превышен лимит займов");
         }
 
         if(!publication.tryBorrow()){
-            System.out.println(publication.getName() + " - нет в наличии");
-            return null;
+            throw new IllegalStateException("Нет свободных экземпляров");
         }
 
-        Loan loan = new Loan(client, publication, rule.MaxLoanDays());
+        Loan loan = new Loan(client, publication, rule.maxLoanDays());
         client.addLoan(loan);
         loans.add(loan);
 
@@ -71,10 +80,9 @@ public class Library {
         return loan;
     }
 
-    public void returnBook(Loan loan){
-        if(loan.isReturned()){
-            System.out.println("Эта книга уже возвращена");
-            return;
+    public void returnBook(Loan loan) {
+        if(!loan.canReturn()){
+            throw new IllegalStateException("Эта книга уже возвращена");
         }
 
         loan.markReturned();
@@ -93,11 +101,15 @@ public class Library {
         }
     }
 
-    public Client getClient(int index) {
-        return clients.get(index);
+    public List<Client> getClients() {
+        return clients;
     }
 
-    public Publication getPublications(int index){
-        return publications.get(index);
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public List<Publication> getPublications(){
+        return publications;
     }
 }

@@ -1,5 +1,8 @@
+package Client;
+
+import Catalog.Publication;
+
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class Loan {
     private static int idCounter = 0;
@@ -9,7 +12,7 @@ public class Loan {
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
-    private boolean isReturned;
+    private LoanState state = new ActiveState();
 
     public Loan(Client client, Publication publication, int loanDays) {
         this.id = idCounter++;
@@ -18,7 +21,29 @@ public class Loan {
         this.borrowDate = LocalDate.now();
         this.dueDate = borrowDate.plusDays(loanDays);   //Строка для стандартной работы модели
         //this.dueDate = borrowDate.minusDays(10);      //Строка для демонстрации просрочки срока
-        this.isReturned = false;
+    }
+
+    public LoanState getState() {
+        return state;
+    }
+
+    public void setState(LoanState state) {
+        this.state = state;
+    }
+
+    public void checkStatus(){
+        if(!(state.getStatusName().equals("Возвращен")) && LocalDate.now().isAfter(dueDate)){
+            this.state = new OverdueState();
+        }
+    }
+    public boolean canReturn(){
+        checkStatus();
+        return state.canReturn();
+    }
+
+    public String getStatus(){
+        checkStatus();
+        return state.getStatusName();
     }
 
     public LocalDate getReturnDate() {
@@ -41,29 +66,17 @@ public class Loan {
         return dueDate;
     }
 
-    public boolean isReturned() {
-        return isReturned;
-    }
-
     public void markReturned(){
         this.returnDate = LocalDate.now();
-        this.isReturned = true;
-    }
-
-    public boolean isOverdue(){
-        if (isReturned){
-            return  returnDate.isAfter(dueDate);
-        }
-        return LocalDate.now().isAfter(dueDate);
+        this.state = new ReturnedState();
     }
 
     public long getOverdueDays(){
-        if (!isOverdue()) return 0;
-        LocalDate checkDate = isReturned ? returnDate : LocalDate.now();
-        return ChronoUnit.DAYS.between(dueDate, checkDate);
+        checkStatus();
+        return state.getOverdueDays(this);
     }
 
     public void printLoan(){
-        System.out.println("  " + publication.getName() + " (вернуть до: " + dueDate + ")");
+        System.out.println(id + ". " + publication.getName() + " -> " + client.getName() + " (вернуть до: " + dueDate + ")");
     }
 }

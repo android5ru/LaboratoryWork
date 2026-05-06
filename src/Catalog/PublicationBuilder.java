@@ -1,3 +1,5 @@
+package Catalog;
+
 public class PublicationBuilder {
     private PublicationType type;
     private String name;
@@ -43,7 +45,15 @@ public class PublicationBuilder {
     }
 
     public Publication build(){
-        return PublicationFactory.create(type, name, year, genre, author, identifier, counts);
+        PublicationFactory factory;
+
+        switch (type) {
+            case BOOK -> factory = new BookFactory();
+            case MAGAZINE -> factory = new MagazineFactory();
+            default -> throw new IllegalArgumentException("Неизвестный тип: " + type);
+        }
+
+        return factory.create(name, year, genre, author, identifier, counts);
     }
 
 }

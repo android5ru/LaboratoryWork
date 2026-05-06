@@ -1,3 +1,7 @@
+package Client;
+
+import Catalog.PublicationType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +27,7 @@ public class Client {
     public int getLoansCountByType(PublicationType type){
         int count = 0;
         for (Loan loan: loans){
-            if(!loan.isReturned() && loan.getPublication().getTypeName() == type){
+            if(loan.canReturn() && loan.getPublication().getTypeName() == type){
                 count++;
             }
         }
@@ -43,9 +47,6 @@ public class Client {
     }
 
     public void printClient(){
-        System.out.println("Список взятых книг:");
-        for (Loan ln: loans){
-            ln.printLoan();
-        }
+        System.out.println(id + ". " + name);
     }
 }

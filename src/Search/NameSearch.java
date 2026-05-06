@@ -1,4 +1,8 @@
-public class NameSearch implements SearchStrategy{
+package Search;
+
+import Catalog.Publication;
+
+public class NameSearch implements SearchStrategy {
     private String name;
 
     public NameSearch(String name){
